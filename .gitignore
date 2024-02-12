@@ -161,3 +161,4 @@ tags
 [._]*.un~
 
 # Default paths to (generated) files or directories
+__compute_cache__
