@@ -1,6 +1,9 @@
 import requests
 
+from llm_tw_word.compute import memory
 
+
+@memory.cache
 def _request_fanhuaji(
     text,
     converter,
