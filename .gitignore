@@ -162,4 +162,4 @@ tags
 
 # Default paths to (generated) files or directories
 /__compute_cache__
-/generated_dataset
+/output_dataset

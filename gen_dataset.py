@@ -48,7 +48,7 @@ def parse_args():
         "-o",
         "--output",
         type=str,
-        default="generated_dataset",
+        default="output_dataset",
         help="Path to output directory",
     )
 
