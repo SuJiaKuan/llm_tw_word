@@ -2,8 +2,8 @@ import json
 
 from langchain.prompts import PromptTemplate
 
-from llm_ift_trials.llm import OpenAI
-from llm_ift_trials.template import ADDR_OPENAI
+from llm_tw_word.llm import OpenAI
+from llm_tw_word.template import ADDR_OPENAI
 
 
 def is_correct(pred, expected):

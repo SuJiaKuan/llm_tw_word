@@ -2,7 +2,7 @@ import os
 
 from langchain_openai import ChatOpenAI
 
-from llm_ift_trials.compute import memory
+from llm_tw_word.compute import memory
 
 
 class OpenAI(object):
