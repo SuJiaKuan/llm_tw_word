@@ -18,14 +18,16 @@ Input: ```{text_trad}```
 Output: \
 """
 
-TEMPLATE_TINY_LLAMA = """\
-Instruction: 對於輸入內容的中文文字，請將中國用語轉成台灣的用語，其他非中文文字或非中國用語都維持不變。
+SYSTEM_TINY_LLAMA = """\
+對於輸入內容的中文文字，請將中國用語轉成台灣的用語，其他非中文文字或非中國用語都維持不變。
 
+範例：
 Input: ```這個視頻的質量真高啊```
-Output: ```這個影片的品質真高啊```
+Output: ```這個影片的品質真高啊```\
+"""
 
-Input: ```{text_trad}```
-Output: \
+TEMPLATE_TINY_LLAMA = """\
+Input: ```{text_trad}```\
 """
 
 
@@ -59,8 +61,11 @@ class TinyLlamaTranslator(object):
             device_map="auto",
         )
 
-    def _complete(self, prompt, max_new_tokens=4096):
+    def _complete(self, prompt, max_new_tokens=2048):
         messages = [{
+            "role": "system",
+            "content": SYSTEM_TINY_LLAMA,
+        }, {
             "role": "user",
             "content": prompt,
         }]
@@ -82,10 +87,6 @@ class TinyLlamaTranslator(object):
             text_trad=text_trad,
         )
         pred = self._complete(prompt)
-
-        if output_part in pred:
-            pred = pred.split(output_part)[-1]
-
-        pred = pred.replace(sep, "").strip().split("\n")[0]
+        pred = pred.split(output_part)[-1].strip().replace(sep, "")
 
         return pred
