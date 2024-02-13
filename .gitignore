@@ -161,4 +161,5 @@ tags
 [._]*.un~
 
 # Default paths to (generated) files or directories
-__compute_cache__
+/__compute_cache__
+/generated_dataset
