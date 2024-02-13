@@ -163,3 +163,4 @@ tags
 # Default paths to (generated) files or directories
 /__compute_cache__
 /output_dataset
+/output_eval
