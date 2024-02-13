@@ -6,6 +6,7 @@ import numpy as np
 from tqdm import tqdm
 
 from llm_tw_word.translate import OpenAITranslator
+from llm_tw_word.translate import TinyLlamaTranslator
 from llm_tw_word.io import load_json
 from llm_tw_word.io import save_json
 from llm_tw_word.io import mkdir_p
@@ -40,6 +41,7 @@ def main(args):
 
     configs = [
         ("openai", OpenAITranslator()),
+        ("tiny_llama", TinyLlamaTranslator()),
     ]
 
     samples = load_json(args.data)
