@@ -22,6 +22,10 @@ USER_PROMPT_TEMPLATE = """\
 Input: ```{text_trad}```\
 """
 
+ASSISTANT_PROMPT_TEMPLATE = """\
+Output: ```{text_tw}```\
+"""
+
 
 class OpenAITranslator(object):
 
