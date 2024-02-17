@@ -42,7 +42,7 @@ def parse_args():
         "--seed",
         type=int,
         default=55688,
-        help="Number of testing data",
+        help="Random seed",
     )
     parser.add_argument(
         "-o",
