@@ -120,23 +120,26 @@ def main(args):
         dataset_num_proc=2,
         packing=True,  # Packs short sequences together to save time!
         args = TrainingArguments(
-            per_device_train_batch_size=2,
+            per_device_train_batch_size=1,
             gradient_accumulation_steps=4,
             warmup_ratio=0.1,
-            num_train_epochs=1,
+            num_train_epochs=5,
             learning_rate=2e-5,
             fp16=not torch.cuda.is_bf16_supported(),
             bf16=torch.cuda.is_bf16_supported(),
             logging_steps=1,
-            # optim="adamw_8bit",
             weight_decay=0.1,
             lr_scheduler_type="linear",
             seed=seed,
+            evaluation_strategy="epoch",
+            save_strategy="epoch",
             output_dir=output_dir,
         ),
     )
 
     trainer.train()
+
+    print(f"Results save in {output_dir}")
 
 
 if __name__ == "__main__":
