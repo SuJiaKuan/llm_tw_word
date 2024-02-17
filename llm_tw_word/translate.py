@@ -7,6 +7,8 @@ from langchain.schema import HumanMessage
 from langchain.schema import SystemMessage
 from transformers import pipeline
 
+from llm_tw_word.const import DEFAULT_LLAMA_MODEL
+from llm_tw_word.const import DEFAULT_OPENAI_MODEL
 from llm_tw_word.compute import memory
 
 
@@ -29,11 +31,13 @@ Output: ```{text_tw}```\
 
 class OpenAITranslator(object):
 
-    def __init__(self, cached=True):
+    def __init__(self, model_name=DEFAULT_OPENAI_MODEL, cached=True):
+        self.model_name = model_name
+
         if cached:
             self._complete = memory.cache(self._complete)
 
-    def _complete(self, prompt, model_name="gpt-3.5-turbo", temperature=0):
+    def _complete(self, prompt, model_name, temperature=0):
         messages = [
             SystemMessage(SYSTEM_PROMPT),
             HumanMessage(prompt),
@@ -46,7 +50,7 @@ class OpenAITranslator(object):
         prompt = PromptTemplate.from_template(USER_PROMPT_TEMPLATE).format(
             text_trad=text_trad,
         )
-        pred = self._complete(prompt)
+        pred = self._complete(prompt, self.model_name)
         pred = pred.split(output_part)[-1].strip().replace(sep, "")
 
         return pred
@@ -54,10 +58,10 @@ class OpenAITranslator(object):
 
 class TinyLlamaTranslator(object):
 
-    def __init__(self, model="TinyLlama/TinyLlama-1.1B-Chat-v1.0"):
+    def __init__(self, model_name=DEFAULT_LLAMA_MODEL):
         self.pipeline = pipeline(
             "text-generation",
-            model=model,
+            model=model_name,
             torch_dtype=torch.bfloat16,
             device_map="auto",
         )
