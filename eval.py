@@ -43,6 +43,12 @@ def parse_args():
         help="Path to dataset file",
     )
     parser.add_argument(
+        "--batch",
+        type=int,
+        default=16,
+        help="Batch size",
+    )
+    parser.add_argument(
         "-o",
         "--output",
         type=str,
@@ -59,6 +65,7 @@ def main(args):
     data_path = args.data
     translator_name = args.translator
     model_name = args.model
+    batch_size = args.batch
     output_dir = args.output
 
     mkdir_p(output_dir)
@@ -75,18 +82,20 @@ def main(args):
     print(f"Running translator: {translator_name}, model: {model_name}")
 
     results = []
-    for sample in tqdm(samples):
-        text_trad = sample["text_trad"]
-        text_tw = sample["text_tw"]
-        pred = translator.translate([text_trad])[0]
-        distance = editdistance.eval(text_tw, pred)
+    for idx in tqdm(range(0, len(samples), batch_size)):
+        sub_samples = samples[idx:min(idx+batch_size, len(samples))]
+        texts = [sample["text_trad"] for sample in sub_samples]
+        expecteds = [sample["text_tw"] for sample in sub_samples]
+        preds = translator.translate(texts)
 
-        results.append({
-            "text_trad": text_trad,
-            "text_tw": text_tw,
-            "pred": pred,
-            "distance": distance,
-        })
+        for text_trad, text_tw, pred in zip(texts, expecteds, preds):
+            distance = editdistance.eval(text_tw, pred)
+            results.append({
+                "text_trad": text_trad,
+                "text_tw": text_tw,
+                "pred": pred,
+                "distance": distance,
+            })
 
     avg_distance = np.mean([r["distance"] for r in results])
 
