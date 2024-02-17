@@ -6,7 +6,7 @@ import numpy as np
 from tqdm import tqdm
 
 from llm_tw_word.translate import OpenAITranslator
-from llm_tw_word.translate import TinyLlamaTranslator
+from llm_tw_word.translate import LlamaTranslator
 from llm_tw_word.const import TRANSLATOR_TYPE
 from llm_tw_word.const import DEFAULT_LLAMA_MODEL
 from llm_tw_word.const import DEFAULT_OPENAI_MODEL
@@ -65,7 +65,7 @@ def main(args):
 
     if translator_name == TRANSLATOR_TYPE.LLAMA:
         model_name = model_name if model_name else DEFAULT_LLAMA_MODEL
-        translator = TinyLlamaTranslator(model_name=model_name)
+        translator = LlamaTranslator(model_name=model_name)
     else:
         model_name = model_name if model_name else DEFAULT_OPENAI_MODEL
         translator = OpenAITranslator(model_name=model_name)

@@ -1,6 +1,6 @@
 import argparse
 
-from llm_tw_word.translate import TinyLlamaTranslator
+from llm_tw_word.translate import LlamaTranslator
 
 
 def parse_args():
@@ -25,7 +25,7 @@ def parse_args():
 
 
 def main(args):
-    translator = TinyLlamaTranslator(model=args.model)
+    translator = LlamaTranslator(model=args.model)
     pred = translator.translate(args.text)
 
     print(f"Input: {args.text}")

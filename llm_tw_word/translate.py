@@ -56,7 +56,7 @@ class OpenAITranslator(object):
         return pred
 
 
-class TinyLlamaTranslator(object):
+class LlamaTranslator(object):
 
     def __init__(self, model_name=DEFAULT_LLAMA_MODEL):
         self.pipeline = pipeline(
