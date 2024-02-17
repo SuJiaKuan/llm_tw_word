@@ -1,4 +1,4 @@
-# Taiwanese Words Translator by LLMs
+# Taiwan Words Translator 繁體中文台灣化翻譯器 by LLMs
 
 The repository contains code and data for LLMs that translate China words to Taiwanese words. The main technique is instruction fine-tuning.
 
