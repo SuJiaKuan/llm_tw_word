@@ -12,6 +12,7 @@ from trl import SFTTrainer
 from llm_tw_word.translate import USER_PROMPT_TEMPLATE
 from llm_tw_word.translate import ASSISTANT_PROMPT_TEMPLATE
 from llm_tw_word.translate import SYSTEM_PROMPT
+from llm_tw_word.const import DEFAULT_LLAMA_MODEL
 from llm_tw_word.io import load_json
 
 
@@ -29,7 +30,7 @@ def parse_args():
     parser.add_argument(
         "--model",
         type=str,
-        default="TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+        default=DEFAULT_LLAMA_MODEL,
         help="Model name for training",
     )
     parser.add_argument(
