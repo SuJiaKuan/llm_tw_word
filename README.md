@@ -43,7 +43,7 @@ export OPENAI_API_KEY=${YOUR_OPENAI_API_KEY}
 
 To run the translation powered by Llama translator, just typing following command on your terminal:
 ```bash
-python inf.py "這個軟件的質量真高啊" llama --model "TODO"
+python inf.py "這個軟件的質量真高啊" llama --model "feabries/TaiwanWordTranslator-v0.1"
 ```
 
 For OpenAI translator:
@@ -55,7 +55,7 @@ python inf.py "這個軟件的質量真高啊" openai
 
 To run the testing set evaluation for llama translator:
 ```bash
-python eval.py llama --model "TODO"
+python eval.py llama --model "feabries/TaiwanWordTranslator-v0.1"
 ```
 
 For OpenAI translator:
