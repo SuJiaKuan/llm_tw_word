@@ -37,23 +37,37 @@ class OpenAITranslator(object):
         if cached:
             self._complete = memory.cache(self._complete)
 
-    def _complete(self, prompt, model_name, temperature=0):
-        messages = [
-            SystemMessage(SYSTEM_PROMPT),
-            HumanMessage(prompt),
-        ]
+    def _complete(self, prompts, model_name, temperature=0):
         model = ChatOpenAI(model_name=model_name, temperature=temperature)
 
-        return model.invoke(messages).content
+        messages_lst = []
+        for prompt in prompts:
+            messages_lst.append([
+                SystemMessage(SYSTEM_PROMPT),
+                HumanMessage(prompt),
+            ])
 
-    def translate(self, text_trad, output_part="Output:", sep="```"):
-        prompt = PromptTemplate.from_template(USER_PROMPT_TEMPLATE).format(
-            text_trad=text_trad,
-        )
-        pred = self._complete(prompt, self.model_name)
-        pred = pred.split(output_part)[-1].strip().replace(sep, "")
+        # TODO (SuJiaKuan): Support parallel API calling?
+        output_texts = [
+            model.invoke(messages).content for messages in messages_lst
+        ]
 
-        return pred
+        return output_texts
+
+    def translate(self, texts, output_part="Output:", sep="```"):
+        prompts = [
+            PromptTemplate.from_template(USER_PROMPT_TEMPLATE).format(
+                text_trad=text_trad,
+            )
+            for text_trad in texts
+        ]
+        preds = self._complete(prompts, self.model_name)
+        preds = [
+            pred.split(output_part)[-1].strip().replace(sep, "")
+            for pred in preds
+        ]
+
+        return preds
 
 
 class LlamaTranslator(object):
@@ -66,32 +80,46 @@ class LlamaTranslator(object):
             device_map="auto",
         )
 
-    def _complete(self, prompt, max_new_tokens=2048):
-        messages = [{
-            "role": "system",
-            "content": SYSTEM_PROMPT,
-        }, {
-            "role": "user",
-            "content": prompt,
-        }]
-        input_text = self.pipeline.tokenizer.apply_chat_template(
-            messages,
-            tokenize=False,
-            add_generation_prompt=True,
-        )
+    def _complete(self, prompts, max_new_tokens=2048):
+        input_texts = []
+        for prompt in prompts:
+            messages = [{
+                "role": "system",
+                "content": SYSTEM_PROMPT,
+            }, {
+                "role": "user",
+                "content": prompt,
+            }]
+            input_texts.append(self.pipeline.tokenizer.apply_chat_template(
+                messages,
+                tokenize=False,
+                add_generation_prompt=True,
+            ))
+
         outputs = self.pipeline(
-            input_text,
+            input_texts,
             do_sample=False,
             max_new_tokens=max_new_tokens,
         )
 
-        return outputs[0]["generated_text"][len(input_text):]
+        output_texts = [
+            output[0]["generated_text"][len(input_text):]
+            for input_text, output in zip(input_texts, outputs)
+        ]
 
-    def translate(self, text_trad, output_part="Output:", sep="```"):
-        prompt = PromptTemplate.from_template(USER_PROMPT_TEMPLATE).format(
-            text_trad=text_trad,
-        )
-        pred = self._complete(prompt)
-        pred = pred.split(output_part)[-1].strip().replace(sep, "")
+        return output_texts
 
-        return pred
+    def translate(self, texts, output_part="Output:", sep="```"):
+        prompts = [
+            PromptTemplate.from_template(USER_PROMPT_TEMPLATE).format(
+                text_trad=text_trad,
+            )
+            for text_trad in texts
+        ]
+        preds = self._complete(prompts)
+        preds = [
+            pred.split(output_part)[-1].strip().replace(sep, "")
+            for pred in preds
+        ]
+
+        return preds

@@ -78,7 +78,7 @@ def main(args):
     for sample in tqdm(samples):
         text_trad = sample["text_trad"]
         text_tw = sample["text_tw"]
-        pred = translator.translate(text_trad)
+        pred = translator.translate([text_trad])[0]
         distance = editdistance.eval(text_tw, pred)
 
         results.append({

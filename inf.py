@@ -51,7 +51,7 @@ def main(args):
         model_name = model_name if model_name else DEFAULT_OPENAI_MODEL
         translator = OpenAITranslator(model_name=model_name)
 
-    pred = translator.translate(text_trad)
+    pred = translator.translate([text_trad])[0]
 
     print(f"Translator: {translator_name}")
     print(f"Model: {model_name}")
