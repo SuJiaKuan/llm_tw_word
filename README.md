@@ -69,3 +69,7 @@ To run llama model training on training set:
 ```bash
 python train.py
 ```
+
+## About the Dataset
+
+Current dataset is collected from [MBZUAI/Bactrian-X](https://huggingface.co/datasets/MBZUAI/Bactrian-X) and automatically labeled by [繁化姬](https://zhconvert.org).
