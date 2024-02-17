@@ -1,5 +1,6 @@
 import argparse
 
+from transformers import LlamaTokenizerFast
 from transformers import LlamaForCausalLM
 
 
@@ -25,8 +26,16 @@ def parse_args():
 
 
 def main(args):
+    print(f"Model name: {args.model}")
+    print(f"Target name: {args.target}")
+
     model = LlamaForCausalLM.from_pretrained(args.model)
+    tokenizer = LlamaTokenizerFast.from_pretrained(args.model)
+
     model.push_to_hub(args.target)
+    tokenizer.push_to_hub(args.target)
+
+    print("Success to upload model")
 
 
 if __name__ == "__main__":
