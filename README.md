@@ -6,6 +6,8 @@ Example:
 - Input: `這個軟件的質量真高啊`
 - Output: `這個軟體的品質真高啊`
 
+😍😍 [See the model card and play it](https://huggingface.co/feabries/TaiwanWordTranslator-v0.1) 😍😍
+
 ## Installation
 
 * Install Miniconda or Anaconda
